@@ -1,0 +1,113 @@
+- device driver:
+	- it should provide mechanism not a policy.
+	- it is important to be policy free 
+	- it is linked aginst the kernel and only the kernel code should be used
+	- 
+
+- classes of device and modules:
+	- char deivce:
+		- it is use the access in byte module
+		- it should implememnt open, close, read, write.
+	- block device:	
+		- u access the data in block not in byte tact
+
+- current process:
+	- current mikro is used to get the tast_struct of the process which is active right now
+
+- current module:
+	- it has small stack 4096 byte
+
+- make file:
+	obj-m := module.o 
+	module-objs := file1.o file2.o
+
+- LKM parts:
+	- __ init / __exit: it is used to put the code in section which can be reused again 
+	- module_init() : it is mandatory to tell the kernel which function should be called when the module is loaded
+	- 
+
+- major and minor number:
+	- char device are accessed through name from user space in the file system under /dev
+	- char device has major number to represent the driver which handle the device 
+	- char device has minor number to to decide which device is accessed from the driver, kernel knows nothing about the minor number
+	- char device number is embedded in the dev_t data type
+	- linux provides APIs to get the major and minor number from the device number, and to create the device number from the major and minor number 
+
+- to register char device in the file system:
+	- register_chrdev_region(dev_t first, unsigned int count, char* name)
+	- alloc_chrdev_region(dev_t* dev, unsigend int firstMinor, unsigned int count, char* name)
+		- they would create a device under proc/devices and sysfs with a major number 
+
+- to create device in /dev:
+	- mknod /dev/nameOfDevice c majorNumber minorNumber
+
+- cdev:
+	- it is a representation of char device in the kernel and it is embedded in the structure file
+	- u have to initalize the structure and to inform the kernel about the structure
+		- void cdev_init(struct cdev *cdev, struct file_operations *fops);
+		- int cdev_add(struct cdev *dev, dev_t num, unsigned int count);
+		- void cdev_del(struct cdev *dev);
+
+- struct file:
+	- every open file in the kernel would have struct file 
+	- it is only in kernel space 
+	- it has position,file_operation, private_data, c_dev to represent char device
+
+- file_operation:
+	- each device should implement basic operations:
+	- struct file_operations fops = {.owner = THIS_MODULE,.llseek = scull_llseek,.read = scull_read,.write = scull_write,.ioctl = scull_ioctl,.open = scull_open,.release = scull_release, };
+
+- open method:
+	- int (*open)(struct inode *inode, struct file *filp);
+	- 
+
+- release method:
+	- int (*open)(struct inode *inode, struct file *filp);
+	- release any resourcess which were ioccupied by the driver
+
+
+- read / write:
+	- return postive: then the read / write with successful
+	- return 0: end of file
+	- return -number: error
+	- if no data is avaliable the code would block
+	- 
+
+- semaphores:
+	- it is an integer value which has functions related to it: down / up
+	- semaphore is used when it is allowed to sleep
+	- to declare semaphores for mutual exclusion we use Mutex which is semaphore whith value of one
+	- APIs:
+		- void init_MUTEX(struct semaphore *sem);
+		- void init_MUTEX_LOCKED(struct semaphore *sem);
+		- void down(struct semaphore *sem);
+		- int down_interruptible(struct semaphore *sem);
+		- int down_trylock(struct semaphore *sem);
+		- void up(struct semaphore *sem);
+
+- spin_lock():
+	- it is used when u are not allow to sleep
+	- the code which would share with interrupt 
+	- spinlock stay active means if u sleeps the other code wont be able to access the data and wont sleep 
+	- spin_lock calls by default disable preemtion of the kernel but does not disable interrupt meaning u have to disable interrupt on the core which u are using to prevent dead lock
+	- APIs:
+		- void spin_lock_init(spinlock_t *lock);
+		- void spin_lock(spinlock_t *lock);
+		- void spin_lock_irqsave(spinlock_t *lock, unsigned long flags);
+		- void spin_lock_irq(spinlock_t *lock);
+		- void spin_lock_bh(spinlock_t *lock)
+		- void spin_unlock(spinlock_t *lock);
+		- void spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags);
+		- void spin_unlock_irq(spinlock_t *lock);
+		- void spin_unlock_bh(spinlock_t *lock);
+
+
+
+
+
+
+
+
+
+
+
