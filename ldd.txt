@@ -101,11 +101,22 @@
 		- void spin_unlock_irq(spinlock_t *lock);
 		- void spin_unlock_bh(spinlock_t *lock);
 
+- sleep:
+	- rules for sleep is that u are not allowed to sleep if u require spin_lock or u are in interrupt context
+	- with mutex it is ok to sleep but should not have semaphore which would prevent the process which should wake u up
+	- APIs:
+		- wait_queue_head_t my_queue;
+		- init_waitqueue_head(&my_queue);
+		- wait_event(queue, condition)
+		- wait_event_interruptible(queue, condition)
+		- wait_event_timeout(queue, condition, timeout)
+		- wait_event_interruptible_timeout(queue, condition, timeout)
 
-
-
-
-
+- timer:
+	- jiffies is a counter which is incremented by the linux by HZ in a second 
+	- it is set to Zero which the system start up
+	- each timer interrupt the value of Jiffies is incremented by 1
+	- 
 
 
 
