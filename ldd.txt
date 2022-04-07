@@ -118,7 +118,26 @@
 	- each timer interrupt the value of Jiffies is incremented by 1
 	- 
 
+- Linux device model:
+	- it is impelement in a way to enable OOP in C language 
+	- it provides features such as Reference counting, sysfs, and device class 
+	- kobject: 
+		- rules:
+			- reference counting, sysfs representation, data glue
+		- it has no benefits as stand alone it should embedded in another object
+		- it has a parent element which points to the next kobject in the hierachy
 
+	- kobj_type:
+		- it is a way to represent the kobject. it gather the kobject by the type and provide common functionality such as release, sysfs_ops, attribute
 
+	- ksets:
+		- it is a way to aggregate kobjects which are embedded in the same data type in a set 
+		- objects of identical type can appear in distinct sets
+		- kset is alway represented in sysfs
+		- every kobject which is a member of kset would appear in sysfs
 
-
+	- bus:
+		- it is channel between the CPU and one or more deivces
+		- it has two kset, devices and drivers which is handle by the bus 
+		- it has match meachnism which would be called every time a driver or device is added to the system 
+		- 
