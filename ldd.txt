@@ -59,7 +59,7 @@
 
 - open method:
 	- int (*open)(struct inode *inode, struct file *filp);
-	- 
+	- from inode u can get cdev structure which u can use to know which device is opened and pass this information to file structure which is passed to read and write system call 
 
 - release method:
 	- int (*open)(struct inode *inode, struct file *filp);
