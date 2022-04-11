@@ -176,6 +176,43 @@
 		- interrupts = <0 66 IRQ_TYPE_LEVEL_HIGH>, <0 67 IRQ_TYPE_LEVEL_HIGH>;
 		- interrupt-names = "ohci", "ehci";
 		- platform_get_resource_byname()
+	
+	- interrupt:
+		- interrupt is divided to controller side and consumer side
+		- controller side:
+			- should have: 
+				- interrupt-controller as Boolean
+				- #interrupt-cells: show how many cells are needed to represent an interrupt
+
+		- comsumer side:
+			- interrupt parent: phandle to the interrupt controller
+			- interrupts: interrupt data
+
+		- to get the irq number from the code
+			- platform_get_irq() would return the irq number
+
+- memory space:
+	- each process is represented by struct task_struct
+	-
+
+- I2C:
+	- driver:
+		- it is declared as instance of struct i2c_driver
+		- probe function: 
+			- static int foo_probe(struct i2c_client *client, const struct i2c_device_id *id)
+				- Check whether the device is the one you expected
+				- Check whether your I2C bus controller of the SoC supports the functionality
+				- needed by your device, using the i2c_check_functionality function
+				- Initialize the device
+				- set up device-specific data
+				- Register the appropriate kernel framework
+		- i2c_device_id:
+			- it must be embedded in the driver to show which devices the drivers support when the match happens the speicifc id would be passed to the probe function
+
+	- client:
+		- it is represent by struct i2c_client
+
+
 
 
 
