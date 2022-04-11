@@ -212,8 +212,11 @@
 	- client:
 		- it is represent by struct i2c_client
 
-
-
+- pinctrl subsystem:
+	- it provides two controller over the pin
+		- pin muxing: UART, SPI, etc
+		- pin configuration: pull up, pull down
+		
 
 
 
