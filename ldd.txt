@@ -89,7 +89,7 @@
 	- it is used when u are not allow to sleep
 	- the code which would share with interrupt 
 	- spinlock stay active means if u sleeps the other code wont be able to access the data and wont sleep 
-	- spin_lock calls by default disable preemtion of the kernel but does not disable interrupt meaning u have to disable interrupt on the core which u are using to prevent dead lock
+	- spin_lock calls by default disable preemtion of the kernel but does not disable interrupt meaning u have to disable interrupt on the core which u are using to prevent dead lock we achieve it by using spin_lock_irq*
 	- APIs:
 		- void spin_lock_init(spinlock_t *lock);
 		- void spin_lock(spinlock_t *lock);
@@ -139,5 +139,44 @@
 	- bus:
 		- it is channel between the CPU and one or more deivces
 		- it has two kset, devices and drivers which is handle by the bus 
-		- it has match meachnism which would be called every time a driver or device is added to the system 
+		- it has match meachnism which would be called every time a driver or device is added to the bus  
 		- 
+- serial communication:
+	- 
+
+- platform devices:
+	- it refers to any deivce which sets on bus which is not known to the kernel
+	- everything should be done manually when we deal with platform device, that is not the case when we deal with I2C device as the kernel provide helper function to deal with conventioal deivces
+	- u have to register the driver useing platform_driver_register() or platform_driver_probe() 
+	- to deal with platform:
+		- register device as platform deivce
+		- register driver as platform driver to handle this device 
+		- to get the resources we have to call platform_get_resource() and tell which reosurce type and the index of this resourcess in the array
+	- resourcess:
+		- represents all the elements fromt the hardware point of view : IO, MEM, REG; IRQ, DMA, BUS
+		- it should be given to the device as array of resuources
+		- code:
+			- struct resource { resource_size_t start; resource_size_t end; const char *name; unsigned long flags; };
+
+- device_tree:
+
+
+
+- OF:
+	- OF matching:
+		- platform/i2c/spi_device_id: 
+		- it is where u define the name of the devices which u can support 
+		- the .name should be the same as device name
+
+
+
+APIs:
+	- container of macro:
+		- u can use this macro to find the container of the pointer 
+		- code:
+			- container_of(pointer, container_type, container_field):
+
+	- linked lists:
+		- it is used in every element and in the head element 
+		- code:
+			- struct list_head { struct list_head *next, *prev;};
