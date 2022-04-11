@@ -159,6 +159,24 @@
 			- struct resource { resource_size_t start; resource_size_t end; const char *name; unsigned long flags; };
 
 - device_tree:
+	- each device is giving at least one node on the device tree
+
+	- properities:
+		- reg: address size tuple
+			- ex: reg< address1 size1 address2 size2 address3 size3 >
+		- #size cell:
+			- to tell how many cells are needed to represent the size of the device in the childern nodes
+		- #address cell:
+			- to tell how many cells are needed to represent a address in the childern nodes
+
+	- naming convention of tags:
+		- tag: name@address to name a node 
+	
+	- nameing conventation of resources:
+		- interrupts = <0 66 IRQ_TYPE_LEVEL_HIGH>, <0 67 IRQ_TYPE_LEVEL_HIGH>;
+		- interrupt-names = "ohci", "ehci";
+		- platform_get_resource_byname()
+
 
 
 
