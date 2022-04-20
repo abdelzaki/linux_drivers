@@ -216,17 +216,18 @@
 	- it provides two controller over the pin
 		- pin muxing: UART, SPI, etc
 		- pin configuration: pull up, pull down
-		
 
-
-
+- GPIO:
+	- old convention
+		- it has number from 0 to max
+		- platform define symbol to use the GPIO line 
+		- sys/class/gpio where the global space of GPIO is avaliable 
+		- sys/kernel/debug/pinctrl/
 - OF:
 	- OF matching:
 		- platform/i2c/spi_device_id: 
 		- it is where u define the name of the devices which u can support 
 		- the .name should be the same as device name
-
-
 
 APIs:
 	- container of macro:
