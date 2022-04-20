@@ -216,6 +216,17 @@
 	- it provides two controller over the pin
 		- pin muxing: UART, SPI, etc
 		- pin configuration: pull up, pull down
+	- it gather the Pins and pass them to the driver
+	- u gather the function un iomux controller, and u use this function by name and index method
+	- ex:
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_usdhc4_1>;
+
+- GPIO subsystem:
+	- u can set the direction of the GPIO
+	- Toggle its output state
+
+
 
 - GPIO:
 	- old convention
