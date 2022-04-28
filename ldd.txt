@@ -37,6 +37,7 @@
 	- register_chrdev_region(dev_t first, unsigned int count, char* name)
 	- alloc_chrdev_region(dev_t* dev, unsigend int firstMinor, unsigned int count, char* name)
 		- they would create a device under proc/devices and sysfs with a major number 
+	- using class_create and device_create u can create directory und /sys/class/${my_class} and also u can create /dev/${my_driver}
 
 - to create device in /dev:
 	- mknod /dev/nameOfDevice c majorNumber minorNumber
@@ -138,11 +139,23 @@
 
 	- bus:
 		- it is channel between the CPU and one or more deivces
-		- it has two kset, devices and drivers which is handle by the bus 
-		- it has match meachnism which would be called every time a driver or device is added to the bus  
-		- 
+		- it has two kset, devices and drivers which is handle by the bus which gets updated when device_register is called on a certain bus, also driver_register() 
+		- it has match mechanism which would be called every time a driver or device is added to the bus and if the match is successful the bus would call the probe function of the driver  
+		- it represents a certain type of bus like USB, PCI, I2C
+
+	- device_driver:
+		- it represents a certain driver which is capable of handeling a specific device on a specific bus
+		- each device_driver should register itself to the bus 
+
+	- device:
+		- it represent a specific device on a bus
+
 - serial communication:
 	- 
+- misc driver:
+	- it allows to register driver only with minor number, as all misc device will have the same major number which is 10
+	- it is defined as instance of the struct miscdevice where u can assigen the minor number 
+	- u register the device using regiser_misc which will create file under sys/class/misc/my_device and would create file under /dev/my_device 
 
 - platform devices:
 	- it refers to any deivce which sets on bus which is not known to the kernel
@@ -159,6 +172,11 @@
 			- struct resource { resource_size_t start; resource_size_t end; const char *name; unsigned long flags; };
 
 - device_tree:
+	- rule:
+		- machine identifcation
+		- runtime configuration such as bootargs 
+		- device population
+
 	- each device is giving at least one node on the device tree
 
 	- properities:
@@ -225,6 +243,14 @@
 - GPIO subsystem:
 	- u can set the direction of the GPIO
 	- Toggle its output state
+	- configure the characters of the GPIO pull up/down
+	- use it as IRQ source
+	- pinmux:
+		- allows u to decide the characters of the pin which u want to control
+		-  multiplexing the pin which u want to use u can make it input, ouput, SPI, etc
+		
+	pinctrl:
+		- control the pin 
 
 
 - OF:
@@ -232,8 +258,6 @@
 		- platform/i2c/spi_device_id: 
 		- it is where u define the name of the devices which u can support 
 		- the .name should be the same as device name
-
-
 
 APIs:
 	- container of macro:
