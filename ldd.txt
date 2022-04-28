@@ -253,6 +253,13 @@
 		- control the pin 
 
 
+
+- GPIO:
+	- old convention
+		- it has number from 0 to max
+		- platform define symbol to use the GPIO line 
+		- sys/class/gpio where the global space of GPIO is avaliable 
+		- sys/kernel/debug/pinctrl/
 - OF:
 	- OF matching:
 		- platform/i2c/spi_device_id: 
