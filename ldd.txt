@@ -91,6 +91,7 @@
 	- the code which would share with interrupt 
 	- spinlock stay active means if u sleeps the other code wont be able to access the data and wont sleep 
 	- spin_lock calls by default disable preemtion of the kernel but does not disable interrupt meaning u have to disable interrupt on the core which u are using to prevent dead lock we achieve it by using spin_lock_irq*
+	- we say that when we use spin lock the lock is hold by the cpu not by the process, it makes sense to use it on SMP processor as it disable preemption on the local cpu 
 	- APIs:
 		- void spin_lock_init(spinlock_t *lock);
 		- void spin_lock(spinlock_t *lock);
@@ -149,6 +150,7 @@
 
 	- device:
 		- it represent a specific device on a bus
+		- the struct is most of the time embedded in another struct such as i2c_device as the struct on it is own is rarely used 
 
 - serial communication:
 	- 
@@ -161,6 +163,10 @@
 	- it refers to any deivce which sets on bus which is not known to the kernel
 	- everything should be done manually when we deal with platform device, that is not the case when we deal with I2C device as the kernel provide helper function to deal with conventioal deivces
 	- u have to register the driver useing platform_driver_register() or platform_driver_probe() 
+	- of_device_id 
+		- represet which devices can be handled by the driver 
+		-  the devices are declared in the deivce tree and the linux boot the probe function of the driver is going to be called id the device which is declared in the device tree is supported by the driver means it is an element of the of_device_id struct which is passed to the driver of_match_table element
+		driver.of_match_table 
 	- to deal with platform:
 		- register device as platform deivce
 		- register driver as platform driver to handle this device 
@@ -170,6 +176,7 @@
 		- it should be given to the device as array of resuources
 		- code:
 			- struct resource { resource_size_t start; resource_size_t end; const char *name; unsigned long flags; };
+
 
 - device_tree:
 	- rule:
@@ -182,6 +189,7 @@
 	- properities:
 		- reg: address size tuple
 			- ex: reg< address1 size1 address2 size2 address3 size3 >
+			- it inherits the size and the length of the parent node
 		- #size cell:
 			- to tell how many cells are needed to represent the size of the device in the childern nodes
 		- #address cell:
@@ -249,11 +257,6 @@
 		- allows u to decide the characters of the pin which u want to control
 		-  multiplexing the pin which u want to use u can make it input, ouput, SPI, etc
 		
-	pinctrl:
-		- control the pin 
-
-
-
 - GPIO:
 	- old convention
 		- it has number from 0 to max
