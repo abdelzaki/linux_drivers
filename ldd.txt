@@ -3,7 +3,6 @@
 	- it is important to be policy free 
 	- it is linked aginst the kernel and only the kernel code should be used
 	- 
-
 - classes of device and modules:
 	- char deivce:
 		- it is use the access in byte module
@@ -25,7 +24,6 @@
 	- __ init / __exit: it is used to put the code in section which can be reused again 
 	- module_init() : it is mandatory to tell the kernel which function should be called when the module is loaded
 	- 
-
 - major and minor number:
 	- char device are accessed through name from user space in the file system under /dev
 	- char device has major number to represent the driver which handle the device 
@@ -157,8 +155,13 @@
 - misc driver:
 	- it allows to register driver only with minor number, as all misc device will have the same major number which is 10
 	- it is defined as instance of the struct miscdevice where u can assigen the minor number 
-	- u register the device using regiser_misc which will create file under sys/class/misc/my_device and would create file under /dev/my_device 
+	- u register the device using regiser_misc which will create file under sys/class/misc/my_device and would create file under /dev/my_device
 
+- platform drivers:
+	- it refers to any driver which is not discoverable 
+	- the enumeration is statically example are: spi, i2c, etc
+	- the driver should provide probe function which is capable of initialize and register plateform device
+	
 - platform devices:
 	- it refers to any deivce which sets on bus which is not known to the kernel
 	- everything should be done manually when we deal with platform device, that is not the case when we deal with I2C device as the kernel provide helper function to deal with conventioal deivces
@@ -166,7 +169,7 @@
 	- of_device_id 
 		- represet which devices can be handled by the driver 
 		-  the devices are declared in the deivce tree and the linux boot the probe function of the driver is going to be called id the device which is declared in the device tree is supported by the driver means it is an element of the of_device_id struct which is passed to the driver of_match_table element
-		driver.of_match_table 
+		driver.of_match_table = of_match_ptr(of_device_id)
 	- to deal with platform:
 		- register device as platform deivce
 		- register driver as platform driver to handle this device 
@@ -176,7 +179,6 @@
 		- it should be given to the device as array of resuources
 		- code:
 			- struct resource { resource_size_t start; resource_size_t end; const char *name; unsigned long flags; };
-
 
 - device_tree:
 	- rule:
